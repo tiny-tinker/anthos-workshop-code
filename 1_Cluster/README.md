@@ -56,7 +56,7 @@ kubectl run -it \
  workload-identity-test
 ```
 
-Once in the running container, who am I? Use ctrl-D to get out
+Once in the running container, who am I? In the list, you should see an entry for `my-account@PROJECT_ID.iam.gserviceaccount.com`. Use ctrl-D to get out
 ```bash
 # You are now connected to an interactive shell within the created Pod. Run the following command inside the Pod:
 gcloud auth list
@@ -83,7 +83,6 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
   --role roles/clouddebugger.agent
 ```
 
-
-
+By now the cluster should be up and running, go check it out [here](https://console.cloud.google.com/kubernetes/list)
 
 

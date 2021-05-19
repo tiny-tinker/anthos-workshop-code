@@ -2,17 +2,12 @@
 
 First, we need to set some variables and enable the APIs. 
 
+
+
 ```bash
-########
-# CHANGE THESE!!!
-#
-ME=me@acme.com
-PROJECT_ID=acme-house-of-cards
 
-
-########
-# RUN THESE
-gcloud config set project $PROJECT_ID
+PROJECT_ID=`gcloud config get-value project`
+ME=`whoami`@houseoftnt.club
 
 # Cluster configuration
 ZONE=us-central1-b
@@ -55,16 +50,6 @@ gcloud services enable \
     --project ${PROJECT_ID}
 
 gcloud config set compute/zone $ZONE
-
-
-
-## #############
-# FIND OUT WHERE THIS GOES AND IF IT'S NEEDED?!
-############
-curl --request POST \
---header "Authorization: Bearer $(gcloud auth print-access-token)" \
---data '' \
-https://meshconfig.googleapis.com/v1alpha1/projects/${PROJECT_ID}:initialize
 
 ```
 

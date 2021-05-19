@@ -6,6 +6,17 @@ Details [here](https://cloud.google.com/service-mesh/docs/scripted-install/gke-i
 Download and make executable the installer. Also install netcat because internet cats are cool. And because it makes a noisy warning go away. 
 
 ```bash
+
+## #############
+# FIND OUT WHERE THIS GOES AND IF IT'S NEEDED?!
+############
+curl --request POST \
+--header "Authorization: Bearer $(gcloud auth print-access-token)" \
+--data '' \
+https://meshconfig.googleapis.com/v1alpha1/projects/${PROJECT_ID}:initialize
+
+
+
 cd ~
 
 curl https://storage.googleapis.com/csm-artifacts/asm/install_asm_1.9 > install_asm
