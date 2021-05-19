@@ -14,19 +14,61 @@ PROJECT_ID=acme-house-of-cards
 # RUN THESE
 gcloud config set project $PROJECT_ID
 
+# Cluster configuration
 ZONE=us-central1-b
-CLUSTER_NAME=gke-us-central
-
 ZONE_2=asia-east2-a
+CLUSTER_NAME=gke-us-central
 CLUSTER_NAME_2=gke-asia-east
 
+K8S_NAMESPACE=my-ns
+
+# Hub membership
 MEMBERSHIP_NAME=gke-asia-membership
 MEMBERSHIP_NAME_2=asia-east-membership
 
 NODE_POOL=my-pool
-K8S_NAMESPACE=my-ns
 KSA_NAME=my-account
 GSA_NAME=$KSA_NAME
 
+# Policy and config management repo
+ACM_REPO=https://github.com/tiny-tinker/anthos-workshop-acm
 ```
+
+
+Now enable the APIs.
+
+```bash
+gcloud services enable \
+    container.googleapis.com \
+    compute.googleapis.com \
+    monitoring.googleapis.com \
+    cloudtrace.googleapis.com \
+    clouddebugger.googleapis.com \
+    cloudprofiler.googleapis.com \
+    gkehub.googleapis.com \
+    anthos.googleapis.com \
+    meshca.googleapis.com \
+    stackdriver.googleapis.com \
+    cloudresourcemanager.googleapis.com \
+    meshconfig.googleapis.com \
+    meshtelemetry.googleapis.com \
+    --project ${PROJECT_ID}
+
+gcloud config set compute/zone $ZONE
+
+
+
+## #############
+# FIND OUT WHERE THIS GOES AND IF IT'S NEEDED?!
+############
+curl --request POST \
+--header "Authorization: Bearer $(gcloud auth print-access-token)" \
+--data '' \
+https://meshconfig.googleapis.com/v1alpha1/projects/${PROJECT_ID}:initialize
+
+```
+
+
+
+
 
