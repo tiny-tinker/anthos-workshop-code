@@ -2,7 +2,7 @@
 
 Now comes the fun parts and our first introduction to "Anthos". [This](https://cloud.google.com/anthos-config-management/docs/how-to/installing#gcloud) doc has a handy walk through and is the source of the code below. 
 
-First we need to register the cluster. Useful doc [here](https://cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#before_you_begin).
+First we need to register the cluster. Useful doc for reference [here](https://cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#before_you_begin).
 
 ```bash
 gcloud beta container hub memberships register $MEMBERSHIP_NAME \
