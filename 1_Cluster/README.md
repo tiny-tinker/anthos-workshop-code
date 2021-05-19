@@ -63,26 +63,6 @@ gcloud auth list
 
 ```
 
-These roles allow workload identity-enabled pods to send traces and metrics to GCP. Check out the helpful notes [here](https://github.com/GoogleCloudPlatform/microservices-demo/blob/master/docs/workload-identity.md#setup-for-workload-identity-clusters).
-
-```bash
-gcloud projects add-iam-policy-binding ${PROJECT_ID} \
-  --member "serviceAccount:${GSA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  --role roles/cloudtrace.agent
-
-gcloud projects add-iam-policy-binding ${PROJECT_ID} \
-  --member "serviceAccount:${GSA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  --role roles/monitoring.metricWriter
-  
-gcloud projects add-iam-policy-binding ${PROJECT_ID} \
-  --member "serviceAccount:${GSA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  --role roles/cloudprofiler.agent
-  
-gcloud projects add-iam-policy-binding ${PROJECT_ID} \
-  --member "serviceAccount:${GSA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  --role roles/clouddebugger.agent
-```
-
 By now the cluster should be up and running, go check it out [here](https://console.cloud.google.com/kubernetes/list)
 
 

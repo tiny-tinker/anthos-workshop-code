@@ -3,6 +3,26 @@ Now let's install the Service Mesh code.
 
 Details [here](https://cloud.google.com/service-mesh/docs/scripted-install/gke-install).
 
+These roles allow workload identity-enabled pods to send traces and metrics to GCP. Check out the helpful notes [here](https://github.com/GoogleCloudPlatform/microservices-demo/blob/master/docs/workload-identity.md#setup-for-workload-identity-clusters).
+
+```bash
+gcloud projects add-iam-policy-binding ${PROJECT_ID} \
+  --member "serviceAccount:${GSA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role roles/cloudtrace.agent
+
+gcloud projects add-iam-policy-binding ${PROJECT_ID} \
+  --member "serviceAccount:${GSA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role roles/monitoring.metricWriter
+  
+gcloud projects add-iam-policy-binding ${PROJECT_ID} \
+  --member "serviceAccount:${GSA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role roles/cloudprofiler.agent
+  
+gcloud projects add-iam-policy-binding ${PROJECT_ID} \
+  --member "serviceAccount:${GSA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role roles/clouddebugger.agent
+```
+
 Download and make executable the installer. Also install netcat because internet cats are cool. And because it makes a noisy warning go away. 
 
 ```bash
@@ -14,8 +34,6 @@ curl --request POST \
 --header "Authorization: Bearer $(gcloud auth print-access-token)" \
 --data '' \
 https://meshconfig.googleapis.com/v1alpha1/projects/${PROJECT_ID}:initialize
-
-
 
 cd ~
 

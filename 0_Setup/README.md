@@ -17,8 +17,8 @@ CLUSTER_NAME_2=gke-asia-east
 K8S_NAMESPACE=my-ns
 
 # Hub membership
-MEMBERSHIP_NAME=gke-asia-membership
-MEMBERSHIP_NAME_2=asia-east-membership
+MEMBERSHIP_NAME=${CLUSTER_NAME}
+MEMBERSHIP_NAME_2=${CLUSTER_NAME_2}
 
 NODE_POOL=my-pool
 KSA_NAME=my-account
