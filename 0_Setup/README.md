@@ -4,11 +4,9 @@ First, we need to set some variables and enable the APIs.
 **Note** You will **NEED** to run `gcloud config set project MY_PROJECT_NAME` before running this bash script. 
 
 ```bash
-cat <<EOF > setvars.sh
-#! /bin/bash
-
-PROJECT_ID=`gcloud config get-value project`
-ME=`whoami`@houseoftnt.club
+cat <<EOF > setvars.env
+export PROJECT_ID=`gcloud config get-value project`
+export ME=`whoami`@houseoftnt.club
 
 # Cluster configuration
 ZONE=us-central1-b
@@ -30,7 +28,7 @@ GSA_NAME=$KSA_NAME
 ACM_REPO=https://github.com/tiny-tinker/anthos-workshop-acm
 EOF
 
-chmod +x setvars.sh
+source setvars.env
 ```
 
 
