@@ -6,7 +6,7 @@ Handy code snippets
 ```bash
  # Get creds for kubectl
  gcloud container clusters get-credentials $CLUSTER_NAME \
-    --project=$PROJECT_ID
+    --project=$PROJECT_ID --zone=$ZONE
 ```
 
 If you lose your shell session, you'll need to refresh the env vars:
