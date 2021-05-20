@@ -30,10 +30,10 @@ Download and make executable the installer. Also install netcat because internet
 ## #############
 # FIND OUT WHERE THIS GOES AND IF IT'S NEEDED?!
 ############
-curl --request POST \
---header "Authorization: Bearer $(gcloud auth print-access-token)" \
---data '' \
-https://meshconfig.googleapis.com/v1alpha1/projects/${PROJECT_ID}:initialize
+# curl --request POST \
+# --header "Authorization: Bearer $(gcloud auth print-access-token)" \
+# --data '' \
+# https://meshconfig.googleapis.com/v1alpha1/projects/${PROJECT_ID}:initialize
 
 cd ~
 
@@ -84,14 +84,20 @@ kubectl label namespace $K8S_NAMESPACE istio-injection- istio.io/rev=$REVISION -
 
 ```
 
+For anyone working with kubernetes from the command line, [k9s](https://github.com/derailed/k9s) is an awesome utility to watch your clusters. After the restart we'll fire it up. 
 
-Finally, restart the deployments in the namespace to trigger re-injection of the service mesh.
+```bash
+curl -LO https://github.com/derailed/k9s/releases/download/v0.24.7/k9s_Linux_x86_64.tar.gz
+tar -xzvf k9s_Linux_x86_64.tar.gz 
+sudo cp k9s /usr/bin
+```
+
+
+Finally, restart the deployments in the namespace to trigger re-injection of the service mesh, then fire up k9s and watch it roll in. 
 
 ```bash
 # restart the Pods to trigger re-injection.
 kubectl rollout restart deployment -n $K8S_NAMESPACE
-
-kubectl get pods -n $K8S_NAMESPACE -l istio.io/rev=$REVISION
 ```
 
 Give it a moment and go check out the [Service Mesh](https://console.cloud.google.com/anthos/services) page. 

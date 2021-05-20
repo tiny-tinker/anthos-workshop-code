@@ -9,4 +9,10 @@ Handy code snippets
     --project=$PROJECT_ID
 ```
 
+If you lose your shell session, you'll need to refresh the env vars:
+
+```
+source setvars.env
+```
+
 

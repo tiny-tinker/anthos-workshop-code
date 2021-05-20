@@ -1,7 +1,7 @@
 # 0_Setup
 
 First, we need to set some variables and enable the APIs. 
-**Note** You will **NEED** to run `gcloud config set project MY_PROJECT_NAME` before running this bash script. 
+**Note** You will **NEED** to run `gcloud config set project MY_PROJECT_NAME` before running this command. 
 
 ```bash
 cat <<EOF > setvars.env
