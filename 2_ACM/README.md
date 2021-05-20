@@ -13,25 +13,21 @@ gcloud beta container hub memberships register $MEMBERSHIP_NAME \
 gcloud container hub memberships describe $MEMBERSHIP_NAME
 ```
 
-Now, install [Config Sync](https://cloud.google.com/anthos-config-management/docs/how-to/installing-config-sync). There is a [note](https://cloud.google.com/anthos-config-management/docs/how-to/installing-config-sync#configuring-config-sync) that you should run these lines with `kubectl`, not `gcloud`. 
+Before we get too carried away, let's check out the namespaces
+```bash
+kubectl get ns
+```
+
+
+Now, install [Config Sync](https://cloud.google.com/anthos-config-management/docs/how-to/installing-config-sync). 
 
 ```bash
-# If your creds are stale or non-existant
-gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE
-
-kubectl create clusterrolebinding cluster-admin-binding \
-  --clusterrole cluster-admin --user $ME
+gcloud alpha container hub config-management enable
 ```
 
 Next, install the Configuration Management Operator into the cluster. This is really the heart of ACM and allows for the policy enforcement. Note the [policyController](https://cloud.google.com/anthos-config-management/docs/how-to/installing-policy-controller) in the yaml. 
 
 ```bash
-
-gsutil cp gs://config-management-release/released/latest/config-management-operator.yaml config-management-operator.yaml
-
-kubectl apply -f config-management-operator.yaml
-
-
 # Also handy doc for the policyController item
 # https://cloud.google.com/anthos-config-management/docs/how-to/installing-policy-controller
 cat <<EOF > config-management.yaml
@@ -40,40 +36,22 @@ kind: ConfigManagement
 metadata:
   name: config-management
 spec:
-  # clusterName is required and must be unique among all managed clusters
-  clusterName: '$CLUSTER_NAME'
-  # Enable multi-repo mode to use additional features
-  enableMultiRepo: true
+  # Use spec.git for generating a RootSync resource in multi-repo mode
   policyController:
     enabled: true
-    # Uncomment to prevent the template library from being installed
-    # templateLibraryInstalled: false
-EOF
-
-
-kubectl apply -f config-management.yaml
-
-
-cat <<EOF > root-sync.yaml
-# If you are using a Config Sync version earlier than 1.7,
-# use: apiVersion: configsync.gke.io/v1alpha1
-apiVersion: configsync.gke.io/v1beta1
-kind: RootSync
-metadata:
-  name: root-sync
-  namespace: config-management-system
-spec:
-  sourceFormat: hierarchy
   git:
-    repo: '$ACM_REPO'
-    branch: main
-    dir: "config-root/"
-    auth: none
-    #secretRef:
-    #  name: '$SECRET_NAME'
+    syncRepo: '$ACM_REPO'
+    syncBranch: 'main'
+    secretType: 'none'
+    policyDir: 'config-root/'
+
 EOF
 
-kubectl apply -f root-sync.yaml
+ gcloud alpha container hub config-management apply \
+     --membership=$MEMBERSHIP_NAME \
+     --config=config-management.yaml \
+     --project=$PROJECT_ID
+
 
 ```
 
@@ -84,13 +62,42 @@ Verify the pods for Config Management are running.
 kubectl -n kube-system get pods | grep config-management
 ```
 
-This is a handy command to check the logs for any sync issues
+This is a handy command to check the logs for any sync issues. There might be errors around "matches for kind K8sBannedConfigMapKeysV1", but keep on. It just takes 4-5 minutes to get everything in sync. 
+
+```bash
+gcloud alpha container hub config-management status     --project=$PROJECT_ID
+```
 
 ```bash
 kubectl logs -n config-management-system -l configsync.gke.io/reconciler=root-reconciler -c git-sync
 ```
 
 If everything looks good, go check it out in the [Config Management Console](https://console.cloud.google.com/anthos/config_management)
+
+
+Let's check out the namespaces again. How is this list different than when we ran this above?
+```bash
+kubectl get ns
+```
+
+
+Now let's check that policy
+
+```bash
+cat <<EOF > bad-map.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: super-secret
+  namespace: $K8S_NAMESPACE
+data:
+  private_key: the lilies are nice this time of year
+EOF
+
+kubectl apply -f bad-map.yaml
+```
+
+
 
 
 
