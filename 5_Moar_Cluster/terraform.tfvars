@@ -1,5 +1,5 @@
-secondary_region      = "asia-east2-a"
-secondary_zones      = ["asia-east2"]
+secondary_region      = "asia-east2"
+secondary_zones      = ["asia-east2-a"]
 node_pool             = "my-pool"
 cluster_name         = "terraform-experiment"
 
