@@ -19,4 +19,3 @@ Cool, let's go check out the shop
 ```bash
 kubectl get service frontend-external -n $K8S_NAMESPACE | awk '{print $4}'
 ```
-

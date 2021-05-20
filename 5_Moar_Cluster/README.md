@@ -1,4 +1,4 @@
-# 4_Moar_Cluster
+# 5_Moar_Cluster
 
 Let's add another cluster so we can make things more interesting.
 
@@ -24,6 +24,11 @@ terraform apply \
 ```
 
 
+Then, let's deploy the app into the cluster... hopefully....
+```bash
+cd ~
+cd microservices-demo/
 
-
-
+kubectl create namespace $K8S_NAMESPACE
+kubectl apply -n ${K8S_NAMESPACE} -f release/kubernetes-manifests.yaml
+```
